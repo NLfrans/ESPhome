@@ -7,7 +7,7 @@ https://www.aliexpress.com/item/33014477509.html?spm=a2g0s.9042311.0.0.53ed4c4dC
 
 Follow this https://www.youtube.com/watch?v=7R30c-H8Rro
 - install ESPhome add-on in HomeAssistant
-- connect you'r board using USB to the you server (RPI or whatever you are using)
+- connect your board using USB to your server (RPI or whatever you are using)
 - Click on the green (+) button
   ```
   1) Enter a name
@@ -54,5 +54,5 @@ SCL -- D5
 RST -- D2 
 ```
 - Click on "Save"
-- Clik on "Upload" your config (this proces will replace the firmware on you board)
-- you'r done
+- Click on "Upload" your config (this process will replace the firmware on you board)
+- your done
