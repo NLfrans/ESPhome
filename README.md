@@ -47,7 +47,8 @@ text_sensor:
     entity_id: sensor.woonkamer_humidity
     id: HUM
 ```
-i had some issues with de Dx number's if it's not working try, when you put a static text on the display press the "RST" button!!!
+I had some issues with de Dx number's, if it's not working try bellow
+When you put a static text on the display press the "RST" button!!!
 ```
 SDA -- D4
 SCL -- D5
