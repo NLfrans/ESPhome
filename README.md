@@ -8,13 +8,13 @@ https://www.aliexpress.com/item/33014477509.html?spm=a2g0s.9042311.0.0.53ed4c4dC
 Follow this https://www.youtube.com/watch?v=7R30c-H8Rro
 - install ESPhome add-on in HomeAssistant
 - connect you'r board using USB to the you server (RPI or whatever you are using)
--
-
-   0) Click on the green (+) button
-   1) Enter a name
-   2) Pick "NodeMCU"
-   3) Enter wifi details
-   4) Click "Submit"
+- Click on the green (+) button
+  ```
+  1) Enter a name
+  2) Pick "NodeMCU"
+  3) Enter wifi details
+  4) Click "Submit"
+  ```
 - Click on "EDIT"
 - Put this code under the rest of the code
 ```
@@ -53,7 +53,6 @@ SDA -- D4
 SCL -- D5
 RST -- D2 
 ```
-
 - Click on "Save"
 - Clik on "Upload" your config (this proces will replace the firmware on you board)
 - you'r done
