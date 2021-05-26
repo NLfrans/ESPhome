@@ -8,7 +8,8 @@ https://www.aliexpress.com/item/33014477509.html?spm=a2g0s.9042311.0.0.53ed4c4dC
 Follow this https://www.youtube.com/watch?v=7R30c-H8Rro
 - install ESPhome add-on in HomeAssistant
 - connect you'r board using USB to the you server (RPI or whatever you are using)
-- 
+-
+
    0) Click on the green (+) button
    1) Enter a name
    2) Pick "NodeMCU"
@@ -46,7 +47,7 @@ text_sensor:
     entity_id: sensor.woonkamer_humidity
     id: HUM
 ```
-~i had some issues with de Dx number's if it's not working try, when you put a static text on the display press the "RST" button!!!~
+i had some issues with de Dx number's if it's not working try, when you put a static text on the display press the "RST" button!!!
 ```
 SDA -- D4
 SCL -- D5
