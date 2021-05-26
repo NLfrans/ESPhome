@@ -6,43 +6,17 @@ CP2014 (WeMos TTGO ESP8266)
 https://www.aliexpress.com/item/33014477509.html?spm=a2g0s.9042311.0.0.53ed4c4dC6gUln
 
 Follow this https://www.youtube.com/watch?v=7R30c-H8Rro
-1) install ESPhome add-on in HomeAssistant
-2) connect you board using USB to the you server (RPI or whatever you are using)
-3) make config like below (i had some issues with de Dx number's if it's not working try, when you put a static text on the display press the "RST" button!!!)
-   ```
-   SDA -- D4
-   SCL -- D5
-   RST -- D2 
-   ```
-5) upload your config (this proces will replace the firmware on you board)
-6) you'r done
-
-My code:
+A) install ESPhome add-on in HomeAssistant
+B) connect you'r board using USB to the you server (RPI or whatever you are using)
+C) 
+   0) Click on the green (+) button
+   1) Enter a name
+   2) Pick "NodeMCU"
+   3) Enter wifi details
+   4) Click "Submit"
+D) Click on "EDIT"
+E) Put this code under the rest of the code
 ```
-esphome:
-  name: esp_keuken
-  platform: ESP8266
-  board: nodemcuv2
-
-wifi:
-  ssid: "NameOfWifi"
-  password: "*****"
-
-  # Enable fallback hotspot (captive portal) in case wifi connection fails
-  ap:
-    ssid: "Esp Keuken Fallback Hotspot"
-    password: "***"
-
-captive_portal:
-
-# Enable logging
-logger:
-
-# Enable Home Assistant API
-api:
-
-ota:
-
 font:
   - file: "fonts/ARIALN.ttf"
     id: my_font
@@ -72,3 +46,13 @@ text_sensor:
     entity_id: sensor.woonkamer_humidity
     id: HUM
 ```
+*i had some issues with de Dx number's if it's not working try, when you put a static text on the display press the "RST" button!!!)
+```
+SDA -- D4
+SCL -- D5
+RST -- D2 
+```
+
+F) Click on "Save"
+G) Clik on "Upload" your config (this proces will replace the firmware on you board)
+H) you'r done
