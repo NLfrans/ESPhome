@@ -20,89 +20,75 @@ Hardware setup:
 
 Script (Arduino):
 ```
-//WIFI settings
+//WIFI
 char ssid[] = "NameOfWifi";
 char pass[] = "*****";
 
-//MQTT settings
-char mqtt_server[] = "192.168.1.1";
-char mqtt_user[] = "mqtt-user";
-char mqtt_pass[] = "*****";
+//MQTT
+char mqtt_server[]    = "192.168.1.1";
+int  mqtt_port        = 1883;
+char mqtt_user[]      = "mqtt-user";
+char mqtt_pass[]      = "*****";
 char mqtt_client_id[] = "doorbell";
 
 //Doorbell settings
-const int doorbell_pin = A0;        //current sensor connected to A0 and ground
-int senseDoorbell = 0;              //variable to hold doorbell sensor reading
-int debounce = 1000;                //only allow one DingDong per second
-unsigned long currentMillis = 0;    //how many milliseconds since the Arduino booted
-unsigned long prevRing = 0;         //The last time the doorbell rang
+const int doorbell_pin       = A0;  //current sensor connected to A0 and ground
+int interval                 = 500; //only allow one DingDong per second
+unsigned long previousMillis = 0;   //The last time the doorbell rang
 
-// Base ESP8266
+#include <ArduinoMqttClient.h>
 #include <ESP8266WiFi.h>
-WiFiClient WIFI_CLIENT;
 
-// MQTT
-#include <PubSubClient.h>
-PubSubClient MQTT_CLIENT;
 
-// This function runs once on startup
+WiFiClient wifiClient;
+MqttClient mqttClient(wifiClient);
+
 void setup() {
-  // Initialize the serial port
+  //Initialize serial and wait for port to open:
   Serial.begin(115200);
   pinMode(doorbell_pin, INPUT);
+  pinMode(D1, INPUT);///
+  while (!Serial) {
+    ; // wait for serial port to connect. Needed for native USB port only
+  }
+  
+  Serial.print("Attempting to connect to WPA SSID: ");
+  Serial.println(ssid);
 
   WiFi.begin(ssid, pass);
   while (WiFi.status() != WL_CONNECTED) {
+    Serial.print(".");
     delay(500);
   }
-  Serial.println("IP address: ");
-  Serial.println(WiFi.localIP());
-}
 
-void reconnect() {
-  // Set our MQTT broker address and port
-  MQTT_CLIENT.setServer(mqtt_server, 1883);
-  MQTT_CLIENT.setClient(WIFI_CLIENT);
+  Serial.println("You're connected to the network");
+  Serial.println();
+  Serial.print("Attempting to connect to the MQTT broker: ");
+  Serial.println(mqtt_server);
 
-  // Loop until we're reconnected
-  while (!MQTT_CLIENT.connected()) {
-    // Attempt to connect
-    Serial.println("Attempt to connect to MQTT broker");
-    MQTT_CLIENT.connect(mqtt_client_id, mqtt_user, mqtt_pass);
-
-    // Wait some time to space out connection requests
-    delay(3000);
+  mqttClient.setUsernamePassword(mqtt_user, mqtt_pass);
+  if (!mqttClient.connect(mqtt_server, mqtt_port)) {
+    Serial.print("MQTT connection failed! Error code = ");
+    Serial.println(mqttClient.connectError());
+    while (1);
   }
 
-  Serial.println("MQTT connected");
+  Serial.println("You're connected to the MQTT broker!");
+  Serial.println();
 }
 
 void loop() {
+  mqttClient.poll();
 
-  currentMillis = millis();
-  if (currentMillis - prevRing >= debounce) {
-    senseDoorbell = analogRead(doorbell_pin);  //read the doorbell sensor
-    
-    if (senseDoorbell > 50) {              //mine read between 0 and 7 with no current and 200 with it.  50 seemed to be safe.
-      Serial.println("DingDong");
-      Serial.println(senseDoorbell);
-      
-      if (!MQTT_CLIENT.connected()) {
-        reconnect();
-      }
-      MQTT_CLIENT.publish("doorbell/press", "True");
-      Serial.println("doorbell/press: True");
+  delay(interval);
 
-      delay(3000);
-      if (!MQTT_CLIENT.connected()) {
-        reconnect();
-      }
-      MQTT_CLIENT.publish("doorbell/press", "False");
-      Serial.println("doorbell/press: False");
-      prevRing = currentMillis;            //engage debounce mode!
-    }
+  int senseDoorbell = analogRead(doorbell_pin);  //read the doorbell sensor
+  if (senseDoorbell > 50) {                      //mine read between 0 and 7 with no current and 200 with it.  50 seemed to be safe.
+    mqttClient.beginMessage("doorbell/press");
+    mqttClient.print("True");
+    mqttClient.endMessage();
+    Serial.println("doorbell/press: True");
   }
-
 }
 ```
 
